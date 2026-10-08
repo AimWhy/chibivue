@@ -1,8 +1,15 @@
 # First Rendering and createApp API
 
-## Where to start? 🤔
+## Where to start?
 
 Now, let's start implementing chibivue step by step. How should we proceed with the implementation?
+
+<KawaikoNote variant="question" title="Let's start implementing!">
+
+This is the exciting moment to dive into Vue.js internals!
+"Where to start" is actually an important point.
+
+</KawaikoNote>
 
 This is something the author always keeps in mind when creating something new: first, think about how the software will be used. \
 For convenience, let's call this "Developer Interface".
@@ -11,7 +18,7 @@ Here, "developer" refers to the person who develops web applications using chibi
 In other words, let's refer to the developer interface of the original Vue.js as a reference when developing chibivue. \
 Specifically, let's take a look at what to write when developing web applications with Vue.js.
 
-## Developer Interface Levels? 🤔
+## Developer Interface Levels?
 
 What we need to be careful about here is that Vue.js has multiple developer interfaces, each with a different level. Here, the level refers to how close it is to raw JavaScript. \
 For example, the following are examples of developer interfaces for displaying HTML with Vue:
@@ -68,6 +75,13 @@ And the important thing here is to "start implementing from the low-level part".
 The reason for this is that in many cases, high-level descriptions are converted to low-level descriptions and executed. \
 In other words, both option 1 and 2 are ultimately converted internally to the form of option 3. \
 The implementation of this conversion is called a "compiler".
+
+<KawaikoNote variant="funny" title="Start from low-level!">
+
+"Low-level" might sound weak, but it's actually the opposite!
+It's the foundation, and without a solid foundation, you can't build higher-level features.
+
+</KawaikoNote>
 
 So, let's start by implementing a developer interface like option 3!
 
@@ -134,7 +148,14 @@ app.mount('#app')
 
 We were able to display the message on the screen! Well done!
 
-![hello_createApp](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/hello_createApp.png)
+![createApp example rendered in the browser](/figures/10-minimum-example/create-app-api/hello-create-app-result.png)
 
-Source code up to this point:  
+<KawaikoNote variant="surprise" title="First step complete!">
+
+With just a few dozen lines of code, a Vue.js-style app is running!
+This small step is a big step toward understanding frameworks.
+
+</KawaikoNote>
+
+Source code up to this point:
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/010_create_app)

@@ -25,6 +25,12 @@ https://github.com/vuejs/core/blob/main/.github/contributing.md
 Vue.js で開発した Web アプリケーションのうち，ブラウザ上やサーバー上(SSR の場合)で動作している部分全般のことです．  
 具体的には以下の要素を含んでます．(それぞれの詳しい説明は各チャプターでやるのでざっくり)
 
+### コンポーネントシステム
+
+Vue.js はコンポーネント指向なフレームワークです．\
+それぞれのユーザーの要件に応じて保守性の高いコンポーネントを作ってカプセル化・再利用を行うことができます．\
+また，コンポーネント間でのステートの共有(props/emits や provide/inject など)であったり，ライフサイクルフックの提供を行ったりしています．
+
 ### リアクティビティシステム
 
 「リアクティビティ」は日本語で言うと「反応性」です．
@@ -49,11 +55,6 @@ const increment = () => {
 仮想 DOM もまた，Vue.js の強力なシステムの一つです．\
 仮想 DOM は JS のランタイム上に DOM を模倣した JavaScript のオブジェクトを定義し，それを現在の DOM と見立て，更新時は現在の仮想 DOM と新しい仮想 DOM とを比較して差分のみを本物の DOM に反映する仕組みです．詳しくは専用のチャプターで詳しく解説します．
 
-### コンポーネント
-
-Vue.js はコンポーネント指向なフレームワークです．\
-それぞれのユーザーの要件に応じて保守性の高いコンポーネントを作ってカプセル化・再利用を行うことができます．\
-また，コンポーネント間でのステートの共有(props/emits や provide/inject など)であったり，ライフサイクルフックの提供を行ったりしています．
 
 ## コンパイラ
 
@@ -103,31 +104,7 @@ https://github.com/vuejs/core/tree/main/packages
 です．
 それぞれの依存関係についてはコントリビュートガイドのこの図がとてもわかりやすいです．
 
-```mermaid
-  flowchart LR
-    compiler-sfc["@vue/compiler-sfc"]
-    compiler-dom["@vue/compiler-dom"]
-    compiler-core["@vue/compiler-core"]
-    vue["vue"]
-    runtime-dom["@vue/runtime-dom"]
-    runtime-core["@vue/runtime-core"]
-    reactivity["@vue/reactivity"]
-
-    subgraph "Runtime Packages"
-      runtime-dom --> runtime-core
-      runtime-core --> reactivity
-    end
-
-    subgraph "Compiler Packages"
-      compiler-sfc --> compiler-core
-      compiler-sfc --> compiler-dom
-      compiler-dom --> compiler-core
-    end
-
-    vue ---> compiler-dom
-    vue --> runtime-dom
-
-```
+![Vue package dependency map](/figures/00-introduction/vue-core-components/package-dependency-overview.svg)
 
 https://github.com/vuejs/core/blob/main/.github/contributing.md#package-dependencies
 

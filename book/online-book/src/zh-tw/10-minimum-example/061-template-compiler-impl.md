@@ -1,13 +1,13 @@
-# 實現模板編譯器
+# 實作模板編譯器
 
-## 實現方法
+## 實作方法
 
-基本方法是操作通過 template 選項傳遞的字串來生成特定函式．\
-讓我們將編譯器分為三個元素．
+基本方法是操作透過 template 選項傳遞的字串來產生特定函式。\
+讓我們將編譯器分為三個元素。
 
 ### 解析
 
-解析涉及從給定字串中提取必要資訊．您可以這樣想：
+解析涉及從給定字串中提取必要資訊。您可以這樣想：
 
 ```ts
 const { tag, props, textContent } = parse(`<p class="hello">Hello World</p>`)
@@ -16,19 +16,19 @@ console.log(prop) // { class: "hello" }
 console.log(textContent) // "Hello World"
 ```
 
-### 程式碼生成
+### 程式碼產生
 
-程式碼生成基於解析結果生成程式碼（字串）．
+程式碼產生基於解析結果產生程式碼（字串）。
 
 ```ts
 const code = codegen({ tag, props, textContent })
 console.log(code) // "h('p', { class: 'hello' }, ['Hello World']);"
 ```
 
-### 函式物件生成
+### 函式物件產生
 
-函式物件生成基於 codegen 生成的程式碼（字串）創建可執行函式．\
-在 JavaScript 中，您可以使用 Function 建構函式從字串生成函式．
+函式物件產生基於 codegen 產生的程式碼（字串）建立可執行函式。\
+在 JavaScript 中，您可以使用 Function 建構函式從字串產生函式。
 
 ```ts
 const f = new Function('return 1')
@@ -39,15 +39,15 @@ const add = new Function('a', 'b', 'return a + b')
 console.log(add(1, 1)) // 2
 ```
 
-我們將使用這個來生成函式．\
-這裡需要注意的一點是，生成的函式只能處理在其內部定義的變數，所以我們需要在其中包含 h 函式等函式的匯入．
+我們將使用這個來產生函式。\
+這裡需要注意的一點是，產生的函式只能處理在其內部定義的變數，所以我們需要在其中包含 h 函式等函式的匯入。
 
 ```ts
 import * as runtimeDom from './runtime-dom'
 const render = new Function('ChibiVue', code)(runtimeDom)
 ```
 
-通過這樣做，我們可以將 runtimeDom 作為 ChibiVue 接收，並在 codegen 階段包含 h 函式，如下所示：
+透過這樣做，我們可以將 runtimeDom 作為 ChibiVue 接收，並在 codegen 階段包含 h 函式，如下所示：
 
 ```ts
 const code = codegen({ tag, props, textContent })
@@ -77,8 +77,8 @@ ChibiVue => {
 }
 ```
 
-並傳遞 runtimeDom 來生成 render 函式．\
-codegen 的責任是生成以下字串：
+並傳遞 runtimeDom 來產生 render 函式。\
+codegen 的責任是產生以下字串：
 
 ```ts
 const code = `
@@ -89,10 +89,10 @@ const code = `
 `
 ```
 
-## 實現
+## 實作
 
-一旦您理解了方法，讓我們實現它．\
-在 `~/packages` 中創建一個名為 `compiler-core` 的目錄，並在其中創建 `index.ts`，`parse.ts` 和 `codegen.ts`．
+一旦您理解了方法，讓我們實作它。\
+在 `~/packages` 中建立一個名為 `compiler-core` 的目錄，並在其中建立 `index.ts`，`parse.ts` 和 `codegen.ts`。
 
 ```sh
 pwd # ~/
@@ -102,9 +102,9 @@ touch packages/compiler-core/parse.ts
 touch packages/compiler-core/codegen.ts
 ```
 
-index.ts 像往常一樣只用於匯出．
+index.ts 像往常一樣只用於匯出。
 
-現在讓我們從 parse 開始實現．
+現在讓我們從 parse 開始實作。
 `packages/compiler-core/parse.ts`
 
 ```ts
@@ -126,9 +126,9 @@ export const baseParse = (
 }
 ```
 
-雖然這是一個使用正規表示式的非常簡單的解析器，但對於第一次實現來說已經足夠了．
+雖然這是一個使用正規表示式的非常簡單的解析器，但對於第一次實作來說已經足夠了。
 
-接下來，讓我們生成程式碼．在 codegen.ts 中實現它．\
+接下來，讓我們產生程式碼。在 codegen.ts 中實作它。\
 `packages/compiler-core/codegen.ts`
 
 ```ts
@@ -150,8 +150,8 @@ export const generate = ({
 }
 ```
 
-現在，讓我們實現一個通過組合這些從模板生成函式字串的函式．\
-創建一個名為 `packages/compiler-core/compile.ts` 的新檔案．
+現在，讓我們實作一個透過組合這些從模板產生函式字串的函式。\
+建立一個名為 `packages/compiler-core/compile.ts` 的新檔案。
 
 `packages/compiler-core/compile.ts`
 
@@ -166,14 +166,14 @@ export function baseCompile(template: string) {
 }
 ```
 
-這應該不會太困難．實際上，`compiler-core` 的責任到此結束．
+這應該不會太困難。實際上，`compiler-core` 的責任到此結束。
 
 ## 執行時編譯器和建置過程編譯器
 
-實際上，Vue 有兩種類型的編譯器．\
-一種是在執行時（在瀏覽器中）執行的編譯器，另一種是在建置過程中（如 Node.js）執行的編譯器．\
-具體來說，執行時編譯器負責編譯 template 選項或作為 HTML 提供的模板，而建置過程編譯器負責編譯 SFC（或 JSX）．\
-我們當前實現的 template 選項屬於前者．
+實際上，Vue 有兩種型別的編譯器。\
+一種是在執行時（在瀏覽器中）執行的編譯器，另一種是在建置過程中（如 Node.js）執行的編譯器。\
+具體來說，執行時編譯器負責編譯 template 選項或作為 HTML 提供的模板，而建置過程編譯器負責編譯 SFC（或 JSX）。\
+我們目前實作的 template 選項屬於前者。
 
 ```ts
 const app = createApp({ template: `<p class="hello">Hello World</p>` })
@@ -184,8 +184,8 @@ app.mount('#app')
 <div id="app"></div>
 ```
 
-作為 HTML 提供的模板是一個開發者介面，您可以在 HTML 中編寫 Vue 模板．\
-（通過 CDN 等快速將其合併到 HTML 中很方便．）
+作為 HTML 提供的模板是一個開發者介面，您可以在 HTML 中編寫 Vue 模板。\
+（透過 CDN 等快速將其合併到 HTML 中很方便。）
 
 ```ts
 const app = createApp()
@@ -199,10 +199,10 @@ app.mount('#app')
 </div>
 ```
 
-這兩種都需要編譯，但編譯是在瀏覽器中執行的．
+這兩種都需要編譯，但編譯是在瀏覽器中執行的。
 
-另一方面，SFC 編譯在專案建置期間執行，執行時只存在編譯後的程式碼．\
-（您需要在開發環境中設定 Vite 或 webpack 等打包器．）
+另一方面，SFC 編譯在專案建置期間執行，執行時只存在編譯後的程式碼。\
+（您需要在開發環境中設定 Vite 或 webpack 等打包器。）
 
 ```vue
 <!-- App.vue -->
@@ -226,42 +226,39 @@ app.mount('#app')
 <div id="app"></div>
 ```
 
-需要注意的重要一點是，兩個編譯器共享公共處理．\
-這個公共部分的原始碼在 `compiler-core` 目錄中實現．\
-執行時編譯器和 SFC 編譯器分別在 `compiler-dom` 和 `compiler-sfc` 目錄中實現．\
-請再次查看這個圖表．
+需要注意的重要一點是，兩個編譯器共享公開處理。\
+這個公開部分的原始碼在 `compiler-core` 目錄中實作。\
+執行時編譯器和 SFC 編譯器分別在 `compiler-dom` 和 `compiler-sfc` 目錄中實作。\
+請再次查看這個圖表。
 
-```mermaid
-  flowchart LR
-    compiler-sfc["@vue/compiler-sfc"]
-    compiler-dom["@vue/compiler-dom"]
-    compiler-core["@vue/compiler-core"]
-    vue["vue"]
-    runtime-dom["@vue/runtime-dom"]
-    runtime-core["@vue/runtime-core"]
-    reactivity["@vue/reactivity"]
-
-    subgraph "Runtime Packages"
-      runtime-dom --> runtime-core
-      runtime-core --> reactivity
-    end
-
-    subgraph "Compiler Packages"
-      compiler-sfc --> compiler-core
-      compiler-sfc --> compiler-dom
-      compiler-dom --> compiler-core
-    end
-
-    vue ---> compiler-dom
-    vue --> runtime-dom
-
-```
+![Vue package dependency map](/figures/00-introduction/vue-core-components/package-dependency-overview.svg)
 
 https://github.com/vuejs/core/blob/main/.github/contributing.md#package-dependencies
 
-## 繼續實現
+## 繼續實作
 
 我們跳得有點快，但讓我們繼續實現．\
+考慮到剛才的討論，我們現在正在實現的是一個執行時中執行的編譯器，因此接下來創建 `compiler-dom` 會比較合適．
+
+```sh
+pwd # ~/
+mkdir packages/compiler-dom
+touch packages/compiler-dom/index.ts
+```
+
+在 `packages/compiler-dom/index.ts` 中實現．
+
+```ts
+import { baseCompile } from '../compiler-core'
+
+export function compile(template: string) {
+  return baseCompile(template)
+}
+```
+
+你可能會想："欸？？這樣不就只是進行了 codegen 嗎？那函式的生成要怎麼辦？"\
+實際上，這裡也沒有進行函式生成．真正生成函式的地方是在 `packages/index.ts`．（對應 Vue 官方原始碼的話，就是 [packages/vue/src/index.ts](https://github.com/vuejs/core/blob/main/packages/vue/src/index.ts)．）
+
 雖然我想實現 `packages/index.ts`，但有一些準備工作要做，所以讓我們先做那個．\
 準備工作是在 `packages/runtime-core/component.ts` 中實現一個變數來保存編譯器本身，以及一個註冊函式．
 
@@ -276,7 +273,7 @@ export function registerRuntimeCompiler(_compile: any) {
 }
 ```
 
-現在，讓我們在 `packages/index.ts` 中生成函式並註冊它．
+現在，讓我們在 `packages/index.ts` 中產生函式並註冊它。
 
 ```ts
 import { compile } from './compiler-dom'
@@ -295,14 +292,14 @@ export * from './runtime-dom'
 export * from './reactivity'
 ```
 
-※ 不要忘記從 `runtime-dom` 匯出 `h` 函式，因為它需要包含在 `runtimeDom` 中．
+※ 不要忘記從 `runtime-dom` 匯出 `h` 函式，因為它需要包含在 `runtimeDom` 中。
 
 ```ts
 export { h } from '../runtime-core'
 ```
 
-現在編譯器已註冊，讓我們實際執行編譯．\
-由於組件選項類型中需要模板，讓我們現在添加模板．
+現在編譯器已註冊，讓我們實際執行編譯。\
+由於元件選項型別中需要模板，讓我們現在加入模板。
 
 ```ts
 export type ComponentOptions = {
@@ -312,11 +309,11 @@ export type ComponentOptions = {
     ctx: { emit: (event: string, ...args: any[]) => void },
   ) => Function
   render?: Function
-  template?: string // 添加
+  template?: string // 加入
 }
 ```
 
-現在，讓我們編譯重要部分．
+現在進入關鍵的編譯部分，不過我們需要先對 renderer 做一些小的重構．
 
 ```ts
 const mountComponent = (initialVNode: VNode, container: RendererElement) => {
@@ -338,7 +335,7 @@ const mountComponent = (initialVNode: VNode, container: RendererElement) => {
 }
 ```
 
-我們將在 `packages/runtime-core/component.ts` 中提取上述部分．
+我們將在 `packages/runtime-core/component.ts` 中提取上述部分。
 
 `packages/runtime-core/component.ts`
 
@@ -367,7 +364,7 @@ const mountComponent = (initialVNode: VNode, container: RendererElement) => {
 }
 ```
 
-現在，讓我們在 `setupComponent` 函式內部執行編譯．
+現在，讓我們在 `setupComponent` 函式內部執行編譯。
 
 ```ts
 export const setupComponent = (instance: ComponentInternalInstance) => {
@@ -391,7 +388,7 @@ export const setupComponent = (instance: ComponentInternalInstance) => {
 }
 ```
 
-現在，我們應該能夠使用 `template` 選項編譯簡單的 HTML．\
+現在，我們應該能夠使用 `template` 選項編譯簡單的 HTML。\
 讓我們在遊樂場中試試！
 
 ```ts
@@ -399,10 +396,10 @@ const app = createApp({ template: `<p class="hello">Hello World</p>` })
 app.mount('#app')
 ```
 
-![simple_template_compiler](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/simple_template_compiler.png)
+![Simple template compiler output before cleanup](/figures/10-minimum-example/template-compiler-impl/simple-template-compiler-before.png)
 
 看起來工作正常．\
-讓我們嘗試做一些更改，看看它們是否得到反映．
+由於相同結構的模板應該都可以被編譯，我們稍微修改一下，確認修改是否能夠生效．
 
 ```ts
 const app = createApp({
@@ -411,9 +408,9 @@ const app = createApp({
 app.mount('#app')
 ```
 
-![simple_template_compiler2](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/simple_template_compiler2.png)
+![Simple template compiler output after cleanup](/figures/10-minimum-example/template-compiler-impl/simple-template-compiler-after.png)
 
-看起來實現正確！
+看起來實作正確！
 
 到此為止的原始碼：
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/060_template_compiler)

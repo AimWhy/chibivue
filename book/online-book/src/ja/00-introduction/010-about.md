@@ -1,6 +1,6 @@
 # はじめに
 
-## 🎯 本書の目的
+## 本書の目的
 
 この本を手に取って頂きありがとうございます！  
 少しでも興味を持って頂いたということで大変嬉しく思います．  
@@ -19,7 +19,7 @@
 通しで全て読んでもらっても，部分的に読みたいところを読んでもらってもご自由に．．  
 少しでも参考になる部分があれば嬉しいです！
 
-## 🤷‍♂️ 想定する対象者
+## 想定する対象者
 
 - **Vue.js を触ったことがある**
 - **TypeScript が書ける**
@@ -29,7 +29,7 @@
 ですが，Vue.js や TypeScript についてまだ十分に扱うことができないという方であれば，まずはそちらの方から学ばれることを推奨します．\
 (基本的な機能について知っていればそれで十分です! (詳しくある必要はない (かも)))
 
-## 🙋‍♀️ この本(著者)が意識していること (したいこと)
+## この本(著者)が意識していること (したいこと)
 
 この本を書く上で意識しておきたいことをいくつかまとめておくので，その心構えで読んでいただけると幸いです．
 もしも，この点で欠けている点があればご指摘ください．
@@ -53,7 +53,7 @@
   実際，著者も Vue.js 以外でも好きなライブラリ等はたくさんありますし，自分では書かないけれどそれらで作られたサービス・知見にとても助けられることも日常茶飯事です．\
   本書の目的はあくまで，「Vue.js について理解する」であり，他の議論はその範囲を超えます．ついてはそれぞれの優劣をつけるような目的は含みません．
 
-## 💡 このオンラインブックで取り上げることと流れ
+## このオンラインブックで取り上げることと流れ
 
 本書はかなりボリューミーな感じになってしまっているので，各部門ごとに達成マイルストーンを立てて分割します．
 
@@ -156,16 +156,16 @@
   この部門ではそういった外部プラグインの実装を行って，「Web アプリケーションを開発する」という視点においてさらに実用的なものを目指します．  
   一部，Vue.js が行っている最適化の実装なども行います．
 
-## 🧑‍🏫 この本に対する意見や質問について
+## この本に対する意見や質問について
 
 この本に関する質問や意見については可能な限り対応しようと思っています．  
 Twitter で声をかけてもらってもいいですし (DM でも TL でも)，リポジトリを公開しているのでそちらの issue 等で投げてもらっても，PR を出していただいても問題ないです．  
 この本も自分自身の理解も完璧ではないと思っているので，随時ご指摘いただけると嬉しいのと，「この説明がわかりづらい！」などもあれば是非問い合わせて欲しいです．  
-少しでも多くの方にわかりやすく，正しい説明を広めたいので，ぜひみなさんと一緒に作り上げていけたらなと思います 👍
+少しでも多くの方にわかりやすく，正しい説明を広めたいので，ぜひみなさんと一緒に作り上げていけたらなと思います．
 
-Twitter(X): https://twitter.com/ubugeeei
+X: https://x.com/ubugeeei
 
-## 🦀 Discord Server について
+## Discord Server について
 
 この本の Discord サーバーを作りました！ (2024/01/01)  
 ~~ここではこのオンラインブックに関するアナウンスや質問対応・Tips の共有などを行っています．~~\
@@ -185,31 +185,34 @@ Twitter(X): https://twitter.com/ubugeeei
 
 ### どこから参加できるか
 
-招待リンクはこちらです 👉 https://discord.gg/aVHvmbmSRy
+招待リンクはこちらです: https://discord.gg/aVHvmbmSRy
 
 この本のヘッダー右上の Discord ボタンからも参加できます．
 
 ## 著者について
 
-**ubugeeei (うぶげ)** 
+**ubugeeei (もののけ王)**
 
-<img src="/ubugeeei.jpg" alt="ubugeeei" width="200">
+<img class="author-avatar" src="/figures/_people/ubugeeei-avatar.jpg" alt="ubugeeei" width="160" height="160">
 
-[Vue.js](https://github.com/vuejs) メンバー, [Vue.js Japan User Group](https://github.com/vuejs-jp) コアスタッフ．\
-[chibivue land](https://github.com/chibivue-land) オーナー.
+[Vue.js](https://vuejs.org/about/team.html) Core Team, [Vue.js Japan User Group](https://github.com/vuejs-jp) Core Staff, [Vite+](https://github.com/voidzero-dev/vite-plus) Core Contributor, [株式会社メイツ](https://github.com/mates-inc) Chief Engineer．\
+[chibivue land](https://github.com/chibivue-land) King. https://chibivue.land
 
-https://ublog.dev/
+Vue と言語処理系，開発体験のためのツールや本を作っています．主なものは [chibivue](https://github.com/chibivue-land/chibivue), [Vize](https://github.com/ubugeeei/vize), [Ox Content](https://github.com/ubugeeei/ox-content), [reading-vuejs-core-vapor](https://github.com/ubugeeei/reading-vuejs-core-vapor), [Vapor Moon](https://github.com/ubugeeei/vapor-moon) です．
 
-<div align="center">
+https://wtrclred.io/
+
+もしよろしければ，スポンサーとして応援していただけると嬉しいです！ https://github.com/sponsors/ubugeeei
 
 ## スポンサー
 
-<a href="https://github.com/sponsors/ubugeeei">
-  <img src="https://raw.githubusercontent.com/ubugeeei/sponsors/main/sponsors.png" alt="ubugeeei's sponsors" />
+<div class="sponsors-block">
+<a class="sponsors-image-link" href="https://github.com/sponsors/ubugeeei">
+  <img class="sponsors-image sponsors-image--light" src="https://raw.githubusercontent.com/ubugeeei/sponsors/main/sponsors-transparent-dark.png" alt="ubugeeei's sponsors" />
+  <img class="sponsors-image sponsors-image--dark" src="https://raw.githubusercontent.com/ubugeeei/sponsors/main/sponsors-transparent.png" alt="ubugeeei's sponsors" />
 </a>
 
-もしよろしければ，私の仕事を応援していただけると嬉しいです！
-
-https://github.com/sponsors/ubugeeei
+<p>もしよろしければ，私の仕事を応援していただけると嬉しいです！</p>
+<p><a href="https://github.com/sponsors/ubugeeei">https://github.com/sponsors/ubugeeei</a></p>
 
 </div>

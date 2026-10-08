@@ -10,10 +10,18 @@
 
 #### runtime-core と runtime-dom
 
-ここで少し Vue.js 本家の構成についての説明です．  
+ここで少し Vue.js 本家の構成についての説明です．
 今回のリファクタでは `runtime-core` というディレクトリと `runtime-dom` というディレクトリを作ります．
 
-それぞれなんなのかというと，runtime-core というのは，Vue.js のランタイム機能のうち本当にコアになる機能が詰まっています．  
+<KawaikoNote variant="question" title="なぜ分けるの？">
+
+「動くコードができたのに，なぜわざわざ分割するの？」と思うかもしれません．\
+実は Vue.js はブラウザだけでなく，サーバーサイドレンダリング（SSR）やネイティブアプリ（Vue Native）など，様々な環境で動作できるように設計されています．\
+そのために，DOM に依存しない「純粋なロジック」と「DOM 操作」を分離しているのです．
+
+</KawaikoNote>
+
+それぞれなんなのかというと，runtime-core というのは，Vue.js のランタイム機能のうち本当にコアになる機能が詰まっています．
 と言われても何がコアで何がコアじゃないのか今の段階だとわかりづらいと思います．
 
 なので，runtime-dom との関係を見てみるとわかりやすいかなと思います．  
@@ -47,7 +55,7 @@ touch packages/runtime-dom/nodeOps.ts
 
 これらの役割についてですが，最初から文章で説明してもわかりづらいかと思いますので以下の図を見てください．
 
-![refactor_createApp!](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/refactor_createApp.png)
+![runtime-core and runtime-dom responsibilities](/figures/10-minimum-example/package-architecture/runtime-core-dom-overview.svg)
 
 #### renderer の設計
 
@@ -84,7 +92,7 @@ Vue.js ではこのレンダリングを担う部分を `renderer` として切�
 - `runtime-dom/index.ts` で nodeOps と renderer のファクトリをもとに renderer を完成させる
 
 ここまでの話が図の赤く囲まれた部分です．
-![refactor_createApp_render](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/refactor_createApp_render.png)
+![Renderer dependency injection](/figures/10-minimum-example/package-architecture/renderer-dependency-injection.svg)
 
 ソースコードベースで説明してみます．今の時点ではまだ仮想 DOM のレンダリング機能は実装していないので，先ほどと同じ機能で作ります．
 
@@ -157,15 +165,42 @@ renderer の設計を見てみました．改めて整理をしておくと，
 - runtime-dom/nodeOps に DOM に依存するオペレーション (操作) をするためのオブジェクトを実装
 - runtime-dom/index にてファクトリ関数と nodeOps を組み合わせて renderer を生成
 
-といった感じでした．  
-一般的にはこのような設計を「DIP」を利用した「DI」と言います．  
-まず，DIP についてですが，DIP (Dependency inversion principle) インタフェースを実装することにより，依存性の逆転を行います．  
-注目するべきところは，renderer.ts に実装した `RendererOptions` という interface です．  
-ファクトリ関数も，nodeOps もこの `RendererOptions` を守るように実装します．(RendererOptions というインタフェースに依存させる)  
-これを利用して DI を行います．DI (Dependency Injection) はあるオブジェクトが依存しているあるオブジェクトを外から注入することによって依存度を下げるテクニックです．  
-今回のケースでいうと，renderer は RendererOptions (を実装したオブジェクト(今回でいえば nodeOps)) に依存しています．  
-この依存性を renderer から直接呼び出して実装するのはやめて，ファクトリの引数として受け取る (外から注入する) ようにしています．  
+といった感じでした．
+一般的にはこのような設計を「DIP」を利用した「DI」と言います．
+
+<KawaikoNote variant="warning" title="少し難しい話です">
+
+DI と DIP は設計パターンの中でも難しい概念です．\
+最初は「なんとなくこういうものか」程度の理解で大丈夫！\
+コードを書いていくうちに「あ，こういうことか！」と分かってきます．
+
+</KawaikoNote>
+
+まず，DIP についてですが，DIP (Dependency inversion principle) インタフェースを実装することにより，依存性の逆転を行います．
+注目するべきところは，renderer.ts に実装した `RendererOptions` という interface です．
+ファクトリ関数も，nodeOps もこの `RendererOptions` を守るように実装します．(RendererOptions というインタフェースに依存させる)
+
+<KawaikoNote variant="funny" title="例えで考えてみよう">
+
+DIP を料理で例えると…\
+「レシピ（interface）」があれば，材料が国産でも輸入品でも同じ料理が作れますよね．\
+renderer（料理人）は「RendererOptions（レシピ）」に従うだけで，実際の材料（DOM 操作 or 他の操作）を気にしなくて良いのです．
+
+</KawaikoNote>
+
+これを利用して DI を行います．DI (Dependency Injection) はあるオブジェクトが依存しているあるオブジェクトを外から注入することによって依存度を下げるテクニックです．
+今回のケースでいうと，renderer は RendererOptions (を実装したオブジェクト(今回でいえば nodeOps)) に依存しています．
+この依存性を renderer から直接呼び出して実装するのはやめて，ファクトリの引数として受け取る (外から注入する) ようにしています．
 これらのテクニックによって renderer が DOM に依存しないような工夫をとっています．
+
+<KawaikoNote variant="base" title="まとめると">
+
+**DIP**: 具体的な実装ではなく，interface（約束事）に依存させる\
+**DI**: 依存するものを外から渡してもらう（注入する）
+
+この 2 つを組み合わせることで，柔軟で テストしやすいコードが書けます！
+
+</KawaikoNote>
 
 DI と DIP は慣れていないと難しい概念かもしれませんが，よく出てくる重要なテクニックなので各自で調べてもらったりして理解していただけると幸いです．
 
@@ -173,7 +208,7 @@ DI と DIP は慣れていないと難しい概念かもしれませんが，よ
 
 実装に話を戻して，renderer が生成できたのであとは以下の図の赤い領域について考えれば良いです．
 
-![refactor_createApp_createApp](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/refactor_createApp_createApp.png)
+![createAppAPI factory flow](/figures/10-minimum-example/package-architecture/create-app-api-factory.svg)
 
 と，いってもやることは単純で，createApp のファクトリ関数に先ほど作った renderer を渡せるように実装すれば良いだけです．
 

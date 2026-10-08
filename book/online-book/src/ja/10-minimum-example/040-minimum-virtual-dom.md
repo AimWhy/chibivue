@@ -2,6 +2,14 @@
 
 ## 仮想 DOM，何に使われる?
 
+<KawaikoNote variant="question" title="なぜ仮想 DOM？">
+
+仮想 DOM の目的は「差分更新」です．
+変更があった部分だけを特定して，必要な DOM 操作だけを行います！
+（ただし仮想 DOM 自体のオーバーヘッドもあるので万能ではありません）
+
+</KawaikoNote>
+
 前のチャプターでリアクティビティシステムを導入したことで画面を動的に更新できるようになりました．
 改めて現在の render 関数の内容を見てみましょう．
 
@@ -93,7 +101,14 @@ patch(vnode, nextVnode, container)
 ```
 
 先に関数名を紹介してしまいましたが，この差分レンダリングは「パッチ」と呼ばれます．差分検出処理 (reconciliation)と呼ばれることもあるようです．
-このように 2 つの Virtual DOM を利用することで効率的に画面の更新を行うことができます．
+このように 2 つの Virtual DOM を利用することで差分のみの画面更新を行うことができます．
+
+<KawaikoNote variant="funny" title="パッチという名前">
+
+「patch」は「継ぎ当て」という意味．破れた服を直すように，
+変わった部分だけを「継ぎ当て」して修正するイメージです！
+
+</KawaikoNote>
 
 ## patch 関数の実装を行う前に
 
@@ -189,7 +204,11 @@ patch 関数でやりたいことは 2 つの vnode の比較なので，便宜�
 そしてそれらは ElementNode と TextNode それぞれで行うようにします．\
 それぞれの mount と patch を process と言う名前でまとめてます．
 
-![patch_fn_architecture](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/patch_fn_architecture.drawio.png)
+<img   
+    src="/figures/10-minimum-example/virtual-dom/patch-function-architecture.svg"
+    alt="Patch Function Architecture"   
+    style="background-color: white;"
+/>
 
 ```ts
 const patch = (
@@ -210,7 +229,7 @@ const processElement = (
   n2: VNode,
   container: HostElement,
 ) => {
-  if (n1 === null) {
+  if (n1 == null) {
     mountElement(n2, container)
   } else {
     patchElement(n1, n2)
@@ -218,7 +237,7 @@ const processElement = (
 }
 
 const processText = (n1: string | null, n2: string, container: HostElement) => {
-  if (n1 === null) {
+  if (n1 == null) {
     mountText(n2, container)
   } else {
     patchText(n1, n2)
@@ -271,7 +290,7 @@ const processElement = (
   n2: VNode,
   container: RendererElement,
 ) => {
-  if (n1 === null) {
+  if (n1 == null) {
     mountElement(n2, container)
   } else {
     // patchElement(n1, n2);
@@ -414,8 +433,15 @@ const processText = (
 
 さて，これで差分レンダリングができるようになったので，playground を見てみましょう．
 
-![patch_rendering](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/patch_rendering.png)
+![patch rendering result in the browser](/figures/10-minimum-example/virtual-dom/patch-rendering-result.png)
 
 これで仮想 DOM を利用したパッチが実装できました!!!!! 祝
+
+<KawaikoNote variant="surprise" title="仮想 DOM 完成！">
+
+差分検出の仕組みが実装できました！これがフレームワークのコア技術です．
+たった数百行で「フレームワークの心臓部」が動いているのを実感してください！
+
+</KawaikoNote>
 
 ここまでのソースコード: [GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/040_vdom_system)

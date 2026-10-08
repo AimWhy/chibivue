@@ -1,5 +1,58 @@
 # 本書の進め方と環境構築
 
+## Web Playground について
+
+本書では，各チャプターの実装コードをブラウザ上で直接試せる **Web Playground** を用意しています．
+環境構築なしで，すぐにコードを編集・実行できるので，まずはこちらで chibivue の動作を体験してみてください！
+
+### Playground の起動方法
+
+```sh
+$ git clone https://github.com/chibivue-land/chibivue
+$ cd chibivue
+$ pnpm install
+$ pnpm play
+```
+
+ブラウザで表示された URL (例: `http://localhost:5173/`) にアクセスすると Playground が起動します．
+
+### Playground の構成
+
+![Initial Web Playground screen](/figures/00-introduction/setup-project/web-playground-initial.png)
+
+Playground は以下の 4 つのエリアで構成されています．
+
+| エリア | 説明 |
+|--------|------|
+| **Explorer (左)** | プロジェクトのファイルツリーを表示します．ファイルをクリックするとエディタで開きます |
+| **Editor (中央)** | Monaco Editor でコードを編集できます |
+| **Preview (右)** | WebContainer 上で動作する開発サーバーのプレビューを表示します |
+| **Terminal / Console (下)** | ターミナル出力と console.log の内容を確認できます |
+
+### 使い方
+
+1. **チャプターを選択する**
+   画面上部のドロップダウンから学習したいチャプターを選択します．
+   検索ボックスでチャプター名を絞り込むこともできます．
+
+2. **Run をクリックする**
+   「Run」ボタンをクリックすると，WebContainer が起動し，依存関係のインストールと開発サーバーの起動が行われます．
+   初回は少し時間がかかりますが，しばらく待つと Preview エリアに結果が表示されます．
+
+3. **コードを編集する**
+   エディタでコードを編集し，「Apply」ボタンをクリックすると変更が適用されます．
+   HMR (Hot Module Replacement) により，変更がリアルタイムで反映されます．
+
+4. **コンソールを確認する**
+   「Console」タブをクリックすると，console.log などの出力を確認できます．
+
+![Web Playground console output](/figures/00-introduction/setup-project/web-playground-console.png)
+
+::: tip
+Web Playground は [WebContainer](https://webcontainers.io/) を使用しています．
+一部のブラウザや環境では動作しない場合があります．その場合は，以下のローカル環境構築を参考にしてください．
+:::
+
 ## 本書の進め方
 
 これから早速 Vue.js の実装を小さく行なっていきます．  
@@ -21,10 +74,10 @@
 さて，早速ですが環境構築からやっていきましょう！\
 一応先に今回構築する環境の内容を列挙しておきます
 
-- ランタイム: [Node.js](https://nodejs.org/en) v22
+- ランタイム: [Node.js](https://nodejs.org/en) v24
 - 言語: [TypeScript](https://www.typescriptlang.org/)
-- パッケージマネージャ: [pnpm](https://pnpm.io/) v9
-- ビルドツール: [Vite](https://vite.dev/) v6
+- パッケージマネージャ: [pnpm](https://pnpm.io/) v10
+- ビルドツール: [Vite](https://vite.dev/) v8
 
 ## Node.js インストール
 
@@ -38,21 +91,6 @@
 基本的なコマンドは npm とほとんど一緒です．  
 https://pnpm.io/installation
 
-また，本書では上記に加え，パッケージマネージャのマネージャ(?) である [ni](https://github.com/antfu/ni) を使っています．  
-(Vue.js core team の [antfu](https://github.com/antfu) さんが作っています．)
-
-こちらのセットアップがまだな方はこちらも合わせてインストールしてください．
-
-```sh
-$ npm i -g @antfu/ni
-```
-
-ni は様々なパッケージマネージャを自動で使い分けてくれる便利ツールです．  
-
-こちらは実は本家の Vue.js の開発でも使われています．
-https://github.com/vuejs/core/blob/main/.github/contributing.md#scripts
-
-パッケージのインストールや開発サーバーの起動などは ni のコマンドを使っていきます．
 
 ## プロジェクトの作成
 
@@ -71,7 +109,7 @@ https://github.com/vuejs/core/blob/main/.github/contributing.md#scripts
 
    ```sh
    $ cd chibivue
-   $ nr setup ../my-chibivue-project
+   $ pnpm setup:book ../my-chibivue-project
    ```
 
 :::
@@ -105,7 +143,7 @@ packages に chibivue 本体の TypeScript ファイル群を実装して，exam
 ## 実際はchibivue用のディレクトリを作って移動してください (以下、同様の注釈は省略します。)
 pwd # ~/
 pnpm init
-ni -D @types/node
+pnpm add -D @types/node
 mkdir packages
 touch packages/index.ts
 touch tsconfig.json
@@ -144,7 +182,7 @@ console.log("Hello, World");
 pwd # ~/
 mkdir examples
 cd examples
-nlx create-vite
+pnpm dlx create-vite
 
 ## --------- create vite cliの設定
 ## Project name: playground
@@ -259,12 +297,12 @@ tsconfig.json の中身を以下のように書き換えます．
 
 ```sh
 pwd # ~
-nr dev
+pnpm dev
 ```
 
 このコマンドで立ち上がった開発者サーバーにアクセスし，メッセージが表示されていれば完了です！
 
-![hello chibivue](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/hello_chibivue.png)
+![Hello chibivue rendered in the browser](/figures/00-introduction/setup-project/hello-chibivue-result.png)
 
 ここまでのソースコード:  
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/00_introduction/010_project_setup)

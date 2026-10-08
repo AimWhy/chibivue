@@ -231,37 +231,34 @@ The source code for this common part is implemented in the `compiler-core` direc
 And the runtime compiler and SFC compiler are implemented in the `compiler-dom` and `compiler-sfc` directories, respectively. \
 Please take a look at this diagram again.
 
-```mermaid
-  flowchart LR
-    compiler-sfc["@vue/compiler-sfc"]
-    compiler-dom["@vue/compiler-dom"]
-    compiler-core["@vue/compiler-core"]
-    vue["vue"]
-    runtime-dom["@vue/runtime-dom"]
-    runtime-core["@vue/runtime-core"]
-    reactivity["@vue/reactivity"]
-
-    subgraph "Runtime Packages"
-      runtime-dom --> runtime-core
-      runtime-core --> reactivity
-    end
-
-    subgraph "Compiler Packages"
-      compiler-sfc --> compiler-core
-      compiler-sfc --> compiler-dom
-      compiler-dom --> compiler-core
-    end
-
-    vue ---> compiler-dom
-    vue --> runtime-dom
-
-```
+![Vue package dependency map](/figures/00-introduction/vue-core-components/package-dependency-overview.svg)
 
 https://github.com/vuejs/core/blob/main/.github/contributing.md#package-dependencies
 
 ## Continued Implementation
 
 We've jumped ahead a bit, but let's continue with the implementation. \
+Considering the discussion just now, what we're implementing is a compiler that runs at runtime, so creating `compiler-dom` next is a good fit.
+
+```sh
+pwd # ~/
+mkdir packages/compiler-dom
+touch packages/compiler-dom/index.ts
+```
+
+We'll implement it in `packages/compiler-dom/index.ts`.
+
+```ts
+import { baseCompile } from '../compiler-core'
+
+export function compile(template: string) {
+  return baseCompile(template)
+}
+```
+
+You might be thinking: "Wait... so this is just codegen? Then how do we generate the function?" \
+In fact, we still don't generate the function here. The actual function generation happens in `packages/index.ts`. (In the official Vue source, that would be [packages/vue/src/index.ts](https://github.com/vuejs/core/blob/main/packages/vue/src/index.ts).)
+
 Although I would like to implement `packages/index.ts`, there is some preparation work to be done, so let's do that first. \
 The preparation work is to implement a variable in `packages/runtime-core/component.ts` to hold the compiler itself, and a registration function.
 
@@ -316,7 +313,7 @@ export type ComponentOptions = {
 }
 ```
 
-Now, let's compile the important part.
+Now we get to the key part — compilation — but first we need to do a small refactor of the renderer.
 
 ```ts
 const mountComponent = (initialVNode: VNode, container: RendererElement) => {
@@ -399,10 +396,10 @@ const app = createApp({ template: `<p class="hello">Hello World</p>` })
 app.mount('#app')
 ```
 
-![simple_template_compiler](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/simple_template_compiler.png)
+![Simple template compiler output before cleanup](/figures/10-minimum-example/template-compiler-impl/simple-template-compiler-before.png)
 
 It seems to be working fine. \
-Let's try making some changes to see if they are reflected.
+Templates with the same structure should all be compilable, so let's tweak it a bit and confirm that the change takes effect.
 
 ```ts
 const app = createApp({
@@ -411,7 +408,7 @@ const app = createApp({
 app.mount('#app')
 ```
 
-![simple_template_compiler2](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/simple_template_compiler2.png)
+![Simple template compiler output after cleanup](/figures/10-minimum-example/template-compiler-impl/simple-template-compiler-after.png)
 
 It appears to be implemented correctly!
 

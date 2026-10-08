@@ -184,7 +184,7 @@ First, let's install the necessary libraries.
 
 ```sh
 pwd # ~
-ni @babel/parser magic-string
+pnpm add @babel/parser magic-string
 ```
 
 Create a file called "rewriteDefault.ts".
@@ -413,6 +413,6 @@ export const setupComponent = (instance: ComponentInternalInstance) => {
 
 Now you should be able to render!!!
 
-![render_sfc](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/render_sfc.png)
+![Rendered SFC script result](/figures/10-minimum-example/compile-sfc-script/render-sfc-result.png)
 
 The styles are not applied because they are not supported, but now you can render the component.

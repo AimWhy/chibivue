@@ -82,7 +82,7 @@ exp は右辺です．`v-bind:id="count"` でいうと count が入ります．
 exp も arg も，動的に変数を埋め込むことができるので，型は `ExpressionNode` になります．  
 ( `v-bind:[key]="count"` のように arg も動的にできるので)
 
-![dir_ast](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/dir_ast.drawio.png)
+![DirectiveNode shape for v-bind](/figures/50-basic-template-compiler/v-bind/directive-node-shape.svg)
 
 ## Parser の変更
 
@@ -175,7 +175,7 @@ function parseAttribute(
 大まかに，必要な項目を挙げると，v-bind に引数が存在するかどうか，class かどうか，style かどうかです．  
 ※ 今回関係してくる処理以外の部分は省略しています．(あまり厳格な図ではありませんがご了承ください．)
 
-![dir_ast](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/transform_vbind.drawio.png)
+![v-bind transform flow](/figures/50-basic-template-compiler/v-bind/transform-vbind-flow.svg)
 
 まず，前提として，ディレクティブというものは基本的に要素 (element) に対して宣言されているものなので，
 
@@ -229,11 +229,85 @@ arg が動的な場合は，特定が不可能なため，normalizeProps とい�
 
 さてここまで実装できたら動作を見てみましょう！
 
-![vbind_test](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/vbind_test.png)
+![v-bind test result in the browser](/figures/50-basic-template-compiler/v-bind/vbind-test-result.png)
 
 とっても良さそうです！
 
+## Same-name Shorthand (Vue 3.4+)
+
+Vue 3.4 から，属性名と変数名が同じ場合の省略記法がサポートされています．
+
+```vue
+<!-- 従来の記法 -->
+<div :id="id" :class="class" :style="style"></div>
+
+<!-- Same-name Shorthand -->
+<div :id :class :style></div>
+```
+
+この機能を実装するには，パーサーとトランスフォーマーを修正する必要があります．
+
+### パーサーでの対応
+
+`:prop` のように値が省略された場合，`exp` は undefined になります．
+
+```ts
+return {
+  type: NodeTypes.DIRECTIVE,
+  name: dirName,
+  exp: value && {  // value がない場合は exp は undefined
+    type: NodeTypes.SIMPLE_EXPRESSION,
+    content: value.content,
+    isStatic: false,
+    loc: value.loc,
+  },
+  loc,
+  arg,
+};
+```
+
+### トランスフォーマーでの対応
+
+`transformBind` で `exp` が undefined の場合，`arg` の内容を `exp` として使用します．
+
+```ts
+export const transformBind: DirectiveTransform = (dir, _node, context) => {
+  let { exp } = dir;
+  const arg = dir.arg!;
+
+  // Same-name shorthand: :prop は :prop="prop" と同じ
+  if (!exp) {
+    if (arg.type !== NodeTypes.SIMPLE_EXPRESSION || !arg.isStatic) {
+      // 動的な引数には対応しない
+      context.onError(
+        createCompilerError(ErrorCodes.X_V_BIND_NO_EXPRESSION, dir.loc)
+      );
+      return { props: [] };
+    }
+    // arg の内容を exp として使用
+    const propName = camelize(arg.content);
+    exp = {
+      type: NodeTypes.SIMPLE_EXPRESSION,
+      content: propName,
+      isStatic: false,
+      loc: arg.loc,
+    };
+  }
+
+  if (arg.type !== NodeTypes.SIMPLE_EXPRESSION) {
+    arg.children.unshift(`(`);
+    arg.children.push(`) || ""`);
+  } else if (!arg.isStatic) {
+    arg.content = `${arg.content} || ""`;
+  }
+
+  return { props: [createObjectProperty(arg, exp)] };
+};
+```
+
+これにより，`:id` と書くだけで `:id="id"` と同じ意味になります．
+
 次回は v-on を実装していきます．
 
-ここまでのソースコード:  
+ここまでのソースコード:
 [GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/50_basic_template_compiler/020_v_bind)

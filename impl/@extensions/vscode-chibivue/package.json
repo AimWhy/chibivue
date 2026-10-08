@@ -1,0 +1,70 @@
+{
+  "name": "vscode-chibivue",
+  "displayName": "Chibivue",
+  "version": "0.0.1",
+  "description": "Language support for chibivue SFC files",
+  "categories": [
+    "Programming Languages"
+  ],
+  "publisher": "chibivue",
+  "main": "./dist/extension.js",
+  "scripts": {
+    "vscode:prepublish": "npm run build",
+    "build": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
+    "dev": "npm run build -- --watch"
+  },
+  "dependencies": {
+    "@chibivue/language-server": "workspace:*",
+    "vscode-languageclient": "^10.0.0"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.120.0",
+    "esbuild": "^0.28.0",
+    "typescript": "^6.0.3"
+  },
+  "contributes": {
+    "languages": [
+      {
+        "id": "vue",
+        "extensions": [
+          ".vue"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "vue",
+        "scopeName": "source.vue",
+        "path": "./syntaxes/vue.tmLanguage.json",
+        "embeddedLanguages": {
+          "source.ts": "typescript",
+          "source.js": "javascript",
+          "text.html.basic": "html",
+          "source.css": "css"
+        }
+      }
+    ],
+    "configuration": {
+      "title": "Chibivue",
+      "properties": {
+        "chibivue.trace.server": {
+          "type": "string",
+          "enum": [
+            "off",
+            "messages",
+            "verbose"
+          ],
+          "default": "off",
+          "description": "Traces the communication between VS Code and the language server."
+        }
+      }
+    }
+  },
+  "activationEvents": [
+    "onLanguage:vue"
+  ],
+  "engines": {
+    "vscode": "^1.75.0"
+  }
+}

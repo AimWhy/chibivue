@@ -1,6 +1,6 @@
 # Introduction
 
-## 🎯 Purpose of this book
+## Purpose of this book
 
 Thank you for picking up this book!  
 I am truly delighted if you have even a slight interest in this book.  
@@ -19,7 +19,7 @@ I've provided a rough outline of goals, but it's not necessary to fulfill all of
 Whether you read it cover-to-cover, or just pick out the parts that interest you, it's up to you.  
 I'd be happy if you find even a small part of this book useful!
 
-## 🤷‍♂️ Intended Audience
+## Intended Audience
 
 - **Those who have experience with Vue.js**
 - **Can write in TypeScript**
@@ -29,7 +29,7 @@ While you might encounter unfamiliar terms throughout the book, I've tried my be
 However, if you come across terms that shouldn't be used for Vue.js or TypeScript, I recommend learning from the respective resources first.  
 (Basic functionalities are enough! (There's no need to delve deep))
 
-## 🙋‍♀️ What this book (and the author) is conscious of (and wants to achieve)
+## What this book (and the author) is conscious of (and wants to achieve)
 
 Before diving in, I'd like to share a few things that I've been especially conscious of while writing this book.  
 I hope you keep these in mind as you read, and if there are any areas where I've missed the mark, please let me know.
@@ -54,7 +54,7 @@ I hope you keep these in mind as you read, and if there are any areas where I've
   In fact, I have my favorites beyond Vue.js, and I frequently benefit from insights and services built with them.  
   The purpose of this book is purely to "understand Vue.js" and doesn't venture into ranking or judging other tools.
 
-## 💡 Topics and structure of this online book
+## Topics and structure of this online book
 
 Since this book has turned out quite voluminous, I've set achievement milestones and divided it into different sections.
 
@@ -150,13 +150,13 @@ Since this book has turned out quite voluminous, I've set achievement milestones
 - **Web Application Essentials Section**  
   By the time we finish the Basic SFC Compiler section, we'll have a somewhat practical set of Vue.js features. However, to develop a web application, there's still a lot missing. For instance, we'll need tools to manage global state and routers. In this section, we'll develop such external plugins, aiming to make our toolkit even more practical from a "web application development" perspective.
 
-## 🧑‍🏫 About opinions and questions on this book
+## About opinions and questions on this book
 
-I intend to respond to questions and feedback about this book to the best of my ability. Feel free to reach out on Twitter (either through DMs or directly on the timeline). Since I've made the repository public, you can also post issues there. I'm aware that my own understanding isn't perfect, so I appreciate any feedback. If you find any explanations unclear or challenging, please don't hesitate to ask. My goal is to spread clear and correct explanations to as many people as possible, and I hope we can build this together 👍.
+I intend to respond to questions and feedback about this book to the best of my ability. Feel free to reach out on Twitter (either through DMs or directly on the timeline). Since I've made the repository public, you can also post issues there. I'm aware that my own understanding isn't perfect, so I appreciate any feedback. If you find any explanations unclear or challenging, please don't hesitate to ask. My goal is to spread clear and correct explanations to as many people as possible, and I hope we can build this together.
 
-https://twitter.com/ubugeeei
+https://x.com/ubugeeei
 
-## 🦀 About the Discord Server
+## About the Discord Server
 
 We have created a Discord Server for this book! (2024/01/01)  
 ~~Here, we share announcements, provide support for questions and tips related to this online book.~~ \
@@ -176,31 +176,34 @@ Recently, We’ve been actively contributing not only to chibivue but also as pa
 
 ### How to join
 
-Here is the invitation link 👉 https://discord.gg/aVHvmbmSRy
+Here is the invitation link: https://discord.gg/aVHvmbmSRy
 
 You can also join from the Discord button on the top right of this book's header.
 
 ## About the Author
 
-**ubugeeei**
+**ubugeeei (mononokeking)**
 
-<img src="/ubugeeei.jpg" alt="ubugeeei" width="200">
+<img class="author-avatar" src="/figures/_people/ubugeeei-avatar.jpg" alt="ubugeeei" width="160" height="160">
 
-Member of [Vue.js](https://github.com/vuejs), core staff of the [Vue.js Japan User Group](https://github.com/vuejs-jp).\
-Owner of [chibivue land](https://github.com/chibivue-land).
+Member of the [Vue.js](https://vuejs.org/about/team.html) Core Team, core staff of the [Vue.js Japan User Group](https://github.com/vuejs-jp), [Vite+](https://github.com/voidzero-dev/vite-plus) Core Contributor, and Chief Engineer at [Mates](https://github.com/mates-inc).\
+[chibivue land](https://github.com/chibivue-land) King. https://chibivue.land
 
-https://ublog.dev/
+I build tools and books around Vue, language processors, and developer experience, including [chibivue](https://github.com/chibivue-land/chibivue), [Vize](https://github.com/ubugeeei/vize), [Ox Content](https://github.com/ubugeeei/ox-content), [reading-vuejs-core-vapor](https://github.com/ubugeeei/reading-vuejs-core-vapor), and [Vapor Moon](https://github.com/ubugeeei/vapor-moon).
 
-<div align="center">
+https://wtrclred.io/
+
+If you'd like, I would appreciate your support as a sponsor! https://github.com/sponsors/ubugeeei
 
 ## Sponsors
 
-<a href="https://github.com/sponsors/ubugeeei">
-  <img src="https://raw.githubusercontent.com/ubugeeei/sponsors/main/sponsors.png" alt="ubugeeei's sponsors" />
+<div class="sponsors-block">
+<a class="sponsors-image-link" href="https://github.com/sponsors/ubugeeei">
+  <img class="sponsors-image sponsors-image--light" src="https://raw.githubusercontent.com/ubugeeei/sponsors/main/sponsors-transparent-dark.png" alt="ubugeeei's sponsors" />
+  <img class="sponsors-image sponsors-image--dark" src="https://raw.githubusercontent.com/ubugeeei/sponsors/main/sponsors-transparent.png" alt="ubugeeei's sponsors" />
 </a>
 
-If you'd like to support my work, I would greatly appreciate it!
-
-https://github.com/sponsors/ubugeeei
+<p>If you'd like to support my work, I would greatly appreciate it!</p>
+<p><a href="https://github.com/sponsors/ubugeeei">https://github.com/sponsors/ubugeeei</a></p>
 
 </div>

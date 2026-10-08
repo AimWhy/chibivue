@@ -130,11 +130,11 @@ export default function vitePluginChibivue(): Plugin {
 
 これについては Vite の公式ドキュメントの方にもトラブルシューティングとして記載されています．
 
-[Syntax Error / Type Error が発生する (Vite)](https://ja.vitejs.dev/guide/troubleshooting.html#syntax-error-type-error-%E3%81%8B%E3%82%99%E7%99%BA%E7%94%9F%E3%81%99%E3%82%8B)
+[Syntax Error / Type Error が発生する (Vite)](https://ja.vite.dev/guide/troubleshooting.html)
 
 今回は，一時的な対応策として，ブラウザモードでない場合には with 文を含まないコードを生成するようにしてみます．
 
-具体的には，バインド対象のデータに関しては with 文を使用せずに prefix として `_cxt.`　を付与する形で制御してみます．\
+具体的には，バインド対象のデータに関しては with 文を使用せずに prefix として `_ctx.` を付与する形で制御してみます．\
 一時的な対応なのであまり厳格ではないのですが，概ね動作するようになると思います．  
 (ちゃんとした対応は後のチャプターで行います．)
 
@@ -220,7 +220,7 @@ const genInterpolation = (
 }
 ```
 
-![compile_sfc_render](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/compile_sfc_render.png)
+![Compiled SFC template render result](/figures/10-minimum-example/compile-sfc-template/compiled-render-result.png)
 
 上手くコンパイルできているようです．あとは同じ要領で，どうにかして script を引っこ抜いて default exports に突っ込めば OK です．
 

@@ -2,6 +2,13 @@
 
 ## What is the h function?
 
+<KawaikoNote variant="question" title="What does 'h' stand for?">
+
+`h` is short for `hyperscript`. Since it's a function that expresses
+HTML (Hyper Text Markup Language) in JavaScript, it got this name!
+
+</KawaikoNote>
+
 So far, we have made the following source code work:
 
 ```ts
@@ -45,7 +52,7 @@ As a basic usage of the h function, you specify the tag name as the first argume
 Here, I specifically mentioned "basic usage" because the h function actually has multiple syntaxes for its arguments, and you can omit the second argument or not use an array for child elements.  
 However, here we will implement it in the most basic syntax.
 
-## How should we implement it? 🤔
+## How should we implement it?
 
 Now that we understand the developer interface, let's decide how to implement it.  
 The important point to note is how it is used as the return value of the render function.  
@@ -83,8 +90,15 @@ const app: App = {
 Well, the only thing that has changed is that we changed the `message` string to an `node` object.  
 All we have to do now is perform DOM operations based on the object in the render function.
 
-Actually, this object has a name, "Virtual DOM".  
-We will explain more about the Virtual DOM in the Virtual DOM chapter, so for now, just remember the name.\
+Actually, this object has a name, "Virtual DOM".
+We will explain more about the Virtual DOM in the Virtual DOM chapter, so for now, just remember the name.
+
+<KawaikoNote variant="funny" title="The true nature of Virtual DOM">
+
+"Virtual DOM" might sound complex, but it's just a JavaScript object!
+It represents the DOM with a simple `{ type, props, children }` structure.
+
+</KawaikoNote>
 
 ## Implementing the h function
 
@@ -237,7 +251,14 @@ app.mount('#app')
 
 Yay! Now we can use the h function to render various tags!
 
-![](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/simple_h_function.png)
+![VNode log from a simple h function](/figures/10-minimum-example/simple-h-function/basic-vnode-log.png)
+
+<KawaikoNote variant="surprise" title="h function complete!">
+
+Now you can express HTML in JavaScript!
+With nested structures, you can create any complex UI.
+
+</KawaikoNote>
 
 Source code up to this point:
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/020_simple_h_function)

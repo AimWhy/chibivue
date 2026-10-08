@@ -2,6 +2,14 @@
 
 ## What is Virtual DOM used for?
 
+<KawaikoNote variant="question" title="Why Virtual DOM?">
+
+The purpose of Virtual DOM is "diff updates".
+It identifies the parts that have changed and performs only necessary DOM operations!
+(However, Virtual DOM itself has overhead, so it's not a silver bullet)
+
+</KawaikoNote>
+
 By introducing the Reactivity System in the previous chapter, we were able to dynamically update the screen. Let's take a look at the content of the current render function again.
 
 ```ts
@@ -185,7 +193,11 @@ Therefore, the patch function is divided into two processes: "initial (generatin
 These processes are named "mount" and "patch" respectively. \
 And they are performed separately for ElementNode and TextNode (combined as "process" with the name "mount" and "patch" for each).
 
-![patch_fn_architecture](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/patch_fn_architecture.drawio.png)
+<img   
+    src="/figures/10-minimum-example/virtual-dom/patch-function-architecture.svg"
+    alt="Patch Function Architecture"   
+    style="background-color: white;"
+/>
 
 ```ts
 const patch = (
@@ -206,7 +218,7 @@ const processElement = (
   n2: VNode,
   container: HostElement,
 ) => {
-  if (n1 === null) {
+  if (n1 == null) {
     mountElement(n2, container)
   } else {
     patchElement(n1, n2)
@@ -214,7 +226,7 @@ const processElement = (
 }
 
 const processText = (n1: string | null, n2: string, container: HostElement) => {
-  if (n1 === null) {
+  if (n1 == null) {
     mountText(n2, container)
   } else {
     patchText(n1, n2)
@@ -267,7 +279,7 @@ const processElement = (
   n2: VNode,
   container: RendererElement,
 ) => {
-  if (n1 === null) {
+  if (n1 == null) {
     mountElement(n2, container)
   } else {
     // patchElement(n1, n2);
@@ -411,8 +423,15 @@ Here, we aim to understand the implementation and role of Virtual DOM up to a ce
 
 Now that we can perform diff rendering, let's take a look at the playground.
 
-![patch_rendering](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/patch_rendering.png)
+![patch rendering result in the browser](/figures/10-minimum-example/virtual-dom/patch-rendering-result.png)
 
 We have successfully implemented patching using Virtual DOM!!!!! Congratulations!
+
+<KawaikoNote variant="surprise" title="Virtual DOM complete!">
+
+The diff detection mechanism is now implemented! This is the core technology of frameworks.
+Experience how the "heart of the framework" works with just a few hundred lines of code!
+
+</KawaikoNote>
 
 Source code up to this point: [GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/040_vdom_system)

@@ -185,7 +185,7 @@ export default { ..._sfc_main, render }
 
 ```sh
 pwd # ~
-ni @babel/parser magic-string
+pnpm add @babel/parser magic-string
 ```
 
 rewriteDefault.ts というファイルを作成します．
@@ -414,6 +414,6 @@ export const setupComponent = (instance: ComponentInternalInstance) => {
 
 これでレンダリングができるようになっているはずです！！！
 
-![render_sfc](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/render_sfc.png)
+![Rendered SFC script result](/figures/10-minimum-example/compile-sfc-script/render-sfc-result.png)
 
 スタイルの対応をしていないのでスタイルが当たっていないですがこれでレンダリングはできるようになりました．

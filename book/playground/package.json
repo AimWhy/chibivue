@@ -1,0 +1,26 @@
+{
+  "name": "@chibivue/book-playground",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vp dev",
+    "build": "vp build",
+    "preview": "vp preview",
+    "generate": "node --experimental-strip-types scripts/generate-chapters.ts"
+  },
+  "dependencies": {
+    "@mdi/font": "^7.4.47",
+    "@monaco-editor/loader": "^1.7.0",
+    "@webcontainer/api": "^1.6.4",
+    "monaco-editor": "^0.55.1",
+    "vue": "^3.5.35"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.7",
+    "typescript": "^6.0.3",
+    "vite": "catalog:",
+    "vite-plus": "catalog:",
+    "vue-tsc": "^3.3.4"
+  }
+}

@@ -41,7 +41,7 @@ import { msg } from 'virtual:my-module'
 
 のように書くと `export const msg = "from virtual module"` が load されます．
 
-[参考](https://ja.vitejs.dev/guide/api-plugin.html#%E4%BB%AE%E6%83%B3%E3%83%A2%E3%82%B7%E3%82%99%E3%83%A5%E3%83%BC%E3%83%AB%E3%81%AE%E8%A6%8F%E7%B4%84)
+[参考](https://ja.vite.dev/guide/api-plugin)
 
 この仕組みを使って SFC の style ブロックを仮想の css ファイルとして読み込むようにしてみます．  
 最初に言った通り，vite では css という拡張子のファイルを import すれば良いので，${SFC のファイル名}.css という仮想モジュールを作ることを考えてみます．
@@ -96,13 +96,13 @@ export default function vitePluginChibivue(): Plugin {
 
 さて，ブラウザで確認してみましょう．
 
-![load_virtual_css_module](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/load_virtual_css_module.png)
+![Virtual CSS module request in the browser](/figures/10-minimum-example/compile-sfc-style/load-virtual-css-module.png)
 
 ちゃんとスタイルが当たるようになっているようです．
 
 ブラウザの方でも，css が import され，.vue.css というファイルが仮想的に生成されているのが分かるかと思います．  
-![load_virtual_css_module2](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/load_virtual_css_module2.png)  
-![load_virtual_css_module3](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/load_virtual_css_module3.png)
+![Loaded CSS module in the browser](/figures/10-minimum-example/compile-sfc-style/loaded-css-in-browser.png)
+![Generated Vue CSS module](/figures/10-minimum-example/compile-sfc-style/generated-vue-css-module.png)
 
 これで SFC が使えるようになりました！
 

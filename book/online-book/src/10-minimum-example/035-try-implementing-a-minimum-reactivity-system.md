@@ -16,6 +16,14 @@ To clarify the purpose again, the purpose this time is to "execute `updateCompon
 
 First, Vue.js's Reactivity System involves `target`, `Proxy`, `ReactiveEffect`, `Dep`, `track`, `trigger`, `targetMap`, and `activeEffect` (currently `activeSub`).
 
+<KawaikoNote variant="warning" title="Lots of characters!">
+
+Many terms suddenly appeared, but don't panic!\
+If we look at each role one by one, the puzzle pieces will fit together.\
+First, let's aim to "roughly grasp the big picture".
+
+</KawaikoNote>
+
 First, let's talk about the structure of targetMap.
 targetMap is a mapping of keys and deps for a certain target.
 Target refers to the object you want to make reactive, and dep refers to the effect (function) you want to execute. You can think of it that way.
@@ -64,7 +72,7 @@ export default defineComponent({
 Although we haven't implemented `watch` in this chapter yet, it is written here for the sake of illustration.\
 In this component, the targetMap will eventually be formed as follows.
 
-![target_map](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/target_map.drawio.png)
+![targetMap structure](/figures/10-minimum-example/reactivity/target-map-structure.svg)
 
 The key of targetMap is "a certain target". In this example, state1 and state2 correspond to that.\
 The keys that these targets have become the keys of targetMap.\
@@ -73,6 +81,15 @@ The effects associated with them become the values.
 In the part `() => h("p", {}, name: ${state1.name})`, the mapping `state1->name->updateComponentFn` is registered, and in the part `watch(() => state2.count, onCountUpdated)`, the mapping `state2->count->onCountUpdated` is registered.
 
 This basic structure is responsible for the rest, and then we think about how to create (register) targetMap and how to execute the effect.
+
+<KawaikoNote variant="funny" title="Think simply">
+
+**targetMap** is a notebook that records "who affects whom".\
+When `state1.name` changes → run `updateComponent`\
+When `state2.count` changes → run `onCountUpdated`\
+It records these relationships!
+
+</KawaikoNote>
 
 That's where the concepts of `track` and `trigger` come in.
 As the names suggest, `track` is a function that registers in `targetMap`, and `trigger` is a function that retrieves the effect from `targetMap` and executes it.
@@ -124,7 +141,15 @@ function reactive<T>(target: T) {
 }
 ```
 
-![reactive](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/reactive.drawio.png)
+![reactive track and trigger flow](/figures/10-minimum-example/reactivity/reactive-track-trigger.svg)
+
+<KawaikoNote variant="base" title="Key points so far">
+
+- **track**: Called when "reading" a value, registers "run X when this value changes"
+- **trigger**: Called when "writing" a value, executes registered handlers
+- **reactive**: A function that creates a Proxy with this mechanism
+
+</KawaikoNote>
 
 Here, you may notice one missing element. That is, "which function to register in track?".
 The answer is the concept of `activeEffect`.
@@ -239,7 +264,7 @@ This allows us to achieve reactivity.
 
 It's a bit complicated, so let's summarize it in a diagram.
 
-![reactivity_create](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/reactivity_create.drawio.png)
+![Reactivity setup flow during mount](/figures/10-minimum-example/reactivity/reactivity-setup-flow.svg)
 
 ## Based on these, let's implement it.
 
@@ -449,7 +474,7 @@ The rendering is working fine now, but something seems off.
 Well, it's not surprising because in `updateComponent`, we create elements every time.
 So, let's remove all the elements before each rendering.
 
-![reactive_example_mistake](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/reactive_example_mistake.png)
+![Reactive example mistake in the browser](/figures/10-minimum-example/reactivity/reactive-example-mistake.png)
 
 Modify the `render` function in `~/packages/runtime-core/renderer.ts` like this:
 
@@ -463,10 +488,18 @@ const render: RootRenderFunction = (vnode, container) => {
 
 Now, how about this?
 
-![reactive_example](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/reactive_example.png)
+![Reactive example rendered in the browser](/figures/10-minimum-example/reactivity/reactive-example-result.png)
 
 Now it seems to be working fine!
 
 Now we can update the screen with `reactive`!
+
+<KawaikoNote variant="surprise" title="Congratulations!">
+
+The basics of the Reactivity System are complete!\
+Do you understand the secret behind Vue.js's "magic" of automatic screen updates?\
+By overcoming this, you now have a deep understanding of Vue.js internals!
+
+</KawaikoNote>
 
 Source code up to this point: [GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/030_reactive_system)

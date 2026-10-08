@@ -1,5 +1,12 @@
 # Single File Component で開発したい (周辺知識編)
 
+<KawaikoNote variant="question" title="SFC って何？">
+
+SFC は template, script, style を 1 ファイルにまとめた Vue 独自の形式です．
+`.vue` ファイルとして保存し，ビルドツールで JavaScript に変換されます！
+
+</KawaikoNote>
+
 ## SFC はどうやって実現されている？
 
 ここからはいよいよ SFC (Single File Component) の対応をやっていきます．  
@@ -97,7 +104,7 @@ Vite のプラグインを書いたことのない方も少ないと思うので
 
 ```sh
 pwd # ~
-nlx create-vite
+pnpm dlx create-vite
 ## ✔ Project name: … plugin-sample
 ## ✔ Select a framework: › Vue
 ## ✔ Select a variant: › TypeScript
@@ -112,7 +119,7 @@ ni
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
-// https://vitejs.dev/config/
+// https://vite.dev/config/
 export default defineConfig({
   plugins: [vue()],
 })
@@ -127,7 +134,7 @@ export default defineConfig({
 import { defineConfig, Plugin } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
-// https://vitejs.dev/config/
+// https://vite.dev/config/
 export default defineConfig({
   plugins: [vue(), myPlugin()],
 })
@@ -157,7 +164,7 @@ myPlugin という名前で作ってみました．
 簡単なので説明しなくても読める方も多いと思いますが一応説明しておきます．
 
 プラグインは Vite が要求する形式に合わせます．いろんなオプションがありますが，今回は簡単なサンプルなので transform オプションのみを使用しました．  
-他は公式ドキュメント等を眺めてもらえるのがいいかと思います．https://vitejs.dev/guide/api-plugin.html
+他は公式ドキュメント等を眺めてもらえるのがいいかと思います．https://ja.vite.dev/guide/api-plugin
 
 transform では `code` と `id` を受け取ることができます．code はファイルの内容，id はファイル名と思ってもらって良いです．\
 戻り値として，code というプロパティに成果物を突っ込みます．  
@@ -203,12 +210,12 @@ createApp(App).mount('#app')
 
 ```sh
 pwd # ~/plugin-sample
-nr dev
+pnpm dev
 ```
 
-![sample_vite_plugin_console](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/sample_vite_plugin_console.png)
+![Sample Vite plugin console output](/figures/10-minimum-example/sfc-prerequisites/sample-vite-plugin-console.png)
 
-![sample_vite_plugin_source](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/sample_vite_plugin_source.png)
+![Sample Vite plugin transformed source](/figures/10-minimum-example/sfc-prerequisites/sample-vite-plugin-source.png)
 
 ちゃんとソースコードが改変されていることがわかります．
 

@@ -131,7 +131,7 @@ You should see an error like this:
 
 This is also described in the Vite official documentation as a troubleshooting tip.
 
-[Syntax Error / Type Error Occurs (Vite)](https://vitejs.dev/guide/troubleshooting.html#syntax-error-type-error-occurs)
+[Syntax Error / Type Error Occurs (Vite)](https://vite.dev/guide/troubleshooting.html#syntax-error-type-error-occurs)
 
 As a temporary solution, let's try to generate code that does not include the `with` statement when it is not in browser mode.
 
@@ -221,7 +221,7 @@ const genInterpolation = (
 }
 ```
 
-![compile_sfc_render](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/compile_sfc_render.png)
+![Compiled SFC template render result](/figures/10-minimum-example/compile-sfc-template/compiled-render-result.png)
 
 It seems that it was compiled successfully. All that's left is to extract the script in the same way and put it into the default exports.
 

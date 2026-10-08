@@ -1,5 +1,12 @@
 # イベントハンドラや属性に対応してみる
 
+<KawaikoNote variant="question" title="props って何？">
+
+props は「プロパティ」の略で，要素に渡す情報のことです．
+イベントハンドラ（onClick など）や属性（style, class など）も props として扱います！
+
+</KawaikoNote>
+
 ## 表示するだけでは寂しいので
 
 せっかくなので簡単な props の実装をしてクリックイベントやスタイルを使えるようにしてみます．
@@ -229,7 +236,14 @@ app.mount('#app')
 
 h 関数でイベントハンドラを登録できるようになりました！
 
-![simple_h_function_event](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/simple_h_function_event.png)
+![Event handler example rendered in the browser](/figures/10-minimum-example/event-handler-and-attrs/event-handler-result.png)
+
+<KawaikoNote variant="funny" title="invoker の工夫">
+
+イベントハンドラを直接登録すると，更新のたびに remove/add が必要です．
+invoker でラップすることで，value を差し替えるだけで済むようになります！
+
+</KawaikoNote>
 
 ## 他の Props にも対応してみる．
 
@@ -261,9 +275,16 @@ const app = createApp({
 app.mount('#app')
 ```
 
-![simple_h_function_attr](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/simple_h_function_attr.png)
+![Attribute patching example rendered in the browser](/figures/10-minimum-example/event-handler-and-attrs/attrs-result.png)
 
 これでかなりの HTML に対応することができました!
 
-ここまでのソースコード:  
+<KawaikoNote variant="surprise" title="props 対応完了！">
+
+イベントと属性に対応したことで，インタラクティブな UI が作れるようになりました！
+ここからアプリらしくなってきますね．
+
+</KawaikoNote>
+
+ここまでのソースコード:
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/020_simple_h_function)

@@ -1,5 +1,58 @@
 # How to Proceed with This Book and Environment Setup
 
+## Web Playground
+
+This book provides a **Web Playground** where you can try the implementation code for each chapter directly in your browser.
+You can edit and run code immediately without any environment setup, so try experiencing chibivue in action here first!
+
+### How to Start the Playground
+
+```sh
+$ git clone https://github.com/chibivue-land/chibivue
+$ cd chibivue
+$ pnpm install
+$ pnpm play
+```
+
+Access the URL displayed in your browser (e.g., `http://localhost:5173/`) to launch the Playground.
+
+### Playground Layout
+
+![Initial Web Playground screen](/figures/00-introduction/setup-project/web-playground-initial.png)
+
+The Playground consists of four areas:
+
+| Area | Description |
+|------|-------------|
+| **Explorer (left)** | Displays the project file tree. Click a file to open it in the editor |
+| **Editor (center)** | Edit code with Monaco Editor |
+| **Preview (right)** | Shows a preview of the dev server running on WebContainer |
+| **Terminal / Console (bottom)** | View terminal output and console.log contents |
+
+### How to Use
+
+1. **Select a chapter**
+   Select the chapter you want to study from the dropdown at the top of the screen.
+   You can also filter chapter names using the search box.
+
+2. **Click Run**
+   Click the "Run" button to start WebContainer, install dependencies, and start the dev server.
+   It takes a little time the first run, but after a while, the results will be displayed in the Preview area.
+
+3. **Edit the code**
+   Edit the code in the editor and click the "Apply" button to apply your changes.
+   Changes are reflected in real-time via HMR (Hot Module Replacement).
+
+4. **Check the console**
+   Click the "Console" tab to view output from console.log and other sources.
+
+![Web Playground console output](/figures/00-introduction/setup-project/web-playground-console.png)
+
+::: tip
+The Web Playground uses [WebContainer](https://webcontainers.io/).
+It may not work in some browsers or environments. In that case, please refer to the local environment setup below.
+:::
+
 ## How to Proceed with This Book
 
 We will promptly start with a simple implementation of Vue.js. Here are some points to keep in mind, precautions, and other essential information:
@@ -14,10 +67,10 @@ We will promptly start with a simple implementation of Vue.js. Here are some poi
 Now, let's quickly move on to setting up the environment! \
 I'll list the tools and versions we'll be using:
 
-- Runtime: [Node.js](https://nodejs.org/en) v22
+- Runtime: [Node.js](https://nodejs.org/en) v24
 - Language: [TypeScript](https://www.typescriptlang.org/)
-- Package Manager: [pnpm](https://pnpm.io/) v9
-- Build Tool: [Vite](https://vite.dev/) v6
+- Package Manager: [pnpm](https://pnpm.io/) v10
+- Build Tool: [Vite](https://vite.dev/) v8
 
 ## Installing Node.js
 
@@ -28,21 +81,6 @@ Most of you are probably familiar with this step. Please set it up on your own. 
 Many of you might typically use npm or yarn. For this book, we will be using pnpm, so please install it as well. The commands are mostly similar to npm.
 https://pnpm.io/installation
 
-In addition to the above, this book also uses [ni](https://github.com/antfu/ni), which can be humorously referred to as a "package manager manager".  
-(It was created by antfu from the Vue.js core team.)
-
-If you haven't set it up yet, please also install it:
-
-```sh
-$ npm i -g @antfu/ni
-```
-
-[ni](https://github.com/antfu/ni) is a handy tool that automatically switches between various package managers for you.
-
-Interestingly, this tool is also used in the actual development of Vue.js.  
-https://github.com/vuejs/core/blob/main/.github/contributing.md#scripts
-
-For package installations, starting the development server, and other tasks, we will be using the ni command.
 
 ## Creating the Project
 
@@ -62,7 +100,7 @@ If you find the manual process tedious, please feel free to use this tool!
 
    ```sh
    $ cd chibivue
-   $ nr setup ../my-chibivue-project
+   $ pnpm setup:book ../my-chibivue-project
    ```
 
 :::
@@ -91,7 +129,7 @@ Below are the steps to construct it.
 ## Please create a directory specifically for chibivue and navigate into it. (Such notes will be omitted hereafter.)
 pwd # ~/
 pnpm init
-ni -D @types/node
+pnpm add -D @types/node
 mkdir packages
 touch packages/index.ts
 touch tsconfig.json
@@ -124,13 +162,13 @@ Contents of packages/index.ts
 console.log("Hello, World")
 ```
 
-### ### Building the Playground Side
+### Building the Playground Side
 
 ```sh
 pwd # ~/
 mkdir examples
 cd examples
-nlx create-vite
+pnpm dlx create-vite
 
 ## --------- Setting up with the Vite CLI
 ## Project name: playground
@@ -239,12 +277,12 @@ Append the following to ~/package.json
 
 ```sh
 pwd # ~
-nr dev
+pnpm dev
 ```
 
 Access the developer server that started with this command. If a message displays, then the setup is complete.
 
-![hello chibivue](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/hello_chibivue.png)
+![Hello chibivue rendered in the browser](/figures/00-introduction/setup-project/hello-chibivue-result.png)
 
 Source code up to this point:  
 [chibivue (GitHub)](https://github.com/chibivue-land/chibivue/tree/main/book/impls//00_introduction/010_project_setup)

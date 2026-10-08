@@ -9,7 +9,7 @@ cd chibivue
 
 # Create a project using the setup command.
 # Specify the root path of the project as an argument.
-nr setup ../my-chibivue-project
+pnpm setup ../my-chibivue-project
 ```
 
 The project setup is now complete.
@@ -451,4 +451,4 @@ const compileSFC = (sfc: string): { code: string } => {
 
 Surprisingly, we were able to implement it in about 110 lines. (Now no one will complain, phew...)
 
-Please make sure to also try the main part of the main part!! (This is just an appendix, though 😙)
+Please make sure to also try the main part of the main part!! (This is just an appendix, though)

@@ -1,5 +1,11 @@
 ## Surrounding Knowledge
 
+<KawaikoNote variant="question" title="What is SFC?">
+
+SFC is a Vue-specific format that combines template, script, and style in one file.
+It's saved as `.vue` files and converted to JavaScript by build tools!
+
+</KawaikoNote>
 
 ## How is SFC implemented?
 
@@ -96,7 +102,7 @@ Since there may be few people who have never written a Vite plugin, let's start 
 
 ```sh
 pwd # ~
-nlx create-vite
+pnpm dlx create-vite
 ## ✔ Project name: … plugin-sample
 ## ✔ Select a framework: › Vue
 ## ✔ Select a variant: › TypeScript
@@ -111,7 +117,7 @@ Let's take a look at the vite.config.ts file of the created project.
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
-// https://vitejs.dev/config/
+// https://vite.dev/config/
 export default defineConfig({
   plugins: [vue()],
 })
@@ -126,7 +132,7 @@ Let's try creating a simple plugin in this project.
 import { defineConfig, Plugin } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
-// https://vitejs.dev/config/
+// https://vite.dev/config/
 export default defineConfig({
   plugins: [vue(), myPlugin()],
 })
@@ -157,7 +163,7 @@ Since it's simple, I think many of you can understand it without explanation, bu
 
 The plugin conforms to the format required by Vite. \
 There are various options, but since this is a simple sample, I only used the `transform` option.\
-I recommend checking the official documentation and other resources for more information: https://vitejs.dev/guide/api-plugin.html
+I recommend checking the official documentation and other resources for more information: https://vite.dev/guide/api-plugin
 
 In the `transform` function, you can receive `code` and `id`. \
 You can think of `code` as the content of the file and `id` as the file name.\
@@ -204,12 +210,12 @@ Let's check it in the browser.
 
 ```sh
 pwd # ~/plugin-sample
-nr dev
+pnpm dev
 ```
 
-![sample_vite_plugin_console](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/sample_vite_plugin_console.png)
+![Sample Vite plugin console output](/figures/10-minimum-example/sfc-prerequisites/sample-vite-plugin-console.png)
 
-![sample_vite_plugin_source](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/sample_vite_plugin_source.png)
+![Sample Vite plugin transformed source](/figures/10-minimum-example/sfc-prerequisites/sample-vite-plugin-source.png)
 
 You can see that the source code has been modified properly.
 

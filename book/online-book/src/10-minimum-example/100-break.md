@@ -1,8 +1,15 @@
 # Take a break
 
+<KawaikoNote variant="surprise" title="Great job!">
+
+Congratulations on completing the Minimal Example Section!
+You've now experienced the core parts of Vue.js.
+
+</KawaikoNote>
+
 ## Minimal Example section is over!
 
-At the beginning, I mentioned that this book is divided into several sections, and the first section, "Minimal Example Section," is now complete. Well done 😁\
+At the beginning, I mentioned that this book is divided into several sections, and the first section, "Minimal Example Section," is now complete. Well done!\
 If you are interested in Virtual DOM or patch rendering, you can move on to the Basic Virtual DOM section. \
 If you want to extend components further, there is the Basic Component section. If you are interested in richer expressions in templates (such as directives), you can explore the Basic Template Compiler section. \
 If you are interested in script setup or compiler macros, you can proceed to the Basic SFC Compiler section. (Of course, you can do them all if you want!!)\
@@ -19,7 +26,7 @@ Specifically, starting from the refactoring we did at the beginning, you should 
 Let's compare the current directory and the directory of vuejs/core.
 
 chibivue
-![minimum_example_artifacts](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/minimum_example_artifacts.png)
+![Minimum example implementation artifacts](/figures/10-minimum-example/break/minimum-example-artifacts.png)
 
 \*The original code is too large to fit in a screenshot, so it is omitted.
 
@@ -350,3 +357,10 @@ Therefore, from now on, the explanations will be kept to a rough policy, and you
 (N-no, it's not that I'm getting lazy to write in detail or anything like that!) \
 Well, it's fun to implement it as the book says, but once it starts to take shape, it's more fun to do it yourself and it leads to a deeper understanding. \
 From here on, please consider this book as a kind of guideline, and the main content is in the original Vue source code!
+
+<KawaikoNote variant="funny" title="The real journey begins!">
+
+With the knowledge you've gained so far, you can now read the Vue.js source code.
+Feel free to proceed to the sections that interest you, or dive into the original code - enjoy it your way!
+
+</KawaikoNote>

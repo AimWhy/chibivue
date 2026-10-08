@@ -16,7 +16,7 @@ First, let's talk about the top-level directories:
 ```sh
 book # Contains materials related to the online book
 
-packages # Contains the latest source code of chibivue. Not directly related to the online book.
+impl # Contains the latest source code of chibivue packages (runtime-core, runtime-dom, reactivity, compiler-core, compiler-dom, compiler-sfc, compiler-vapor, runtime-vapor, server-renderer, etc.)
 
 examples # Contains sample code using the packages. Not directly related to the online book.
 
@@ -30,7 +30,7 @@ Now, let's take a closer look at the book directory.
 ```sh
 book
   |- images # Contains image files used in the online book.
-  |- online-book # The main body of the online book. It is a Vitepress project.
+  |- online-book # The main body of the online book. It is an Ox Content project.
   |- impls # Contains the source code for each chapter.
 ```
 
@@ -48,31 +48,82 @@ You can choose any name for the repository. Feel free to set other information a
 
 #### Installing the necessary tools
 
-- [Node.js](https://nodejs.org/en) (v22.x)
-- [pnpm](https://pnpm.io/) (v9.x)
-- [@antfu/ni](https://github.com/antfu/ni)
-  ni is a great package manager wrapper created by [Anthony Fu](https://github.com/antfu). We assume the use of ni in the chibivue documentation.
+- [Vite+](https://viteplus.dev/guide/)
 
-### Starting the playground
+### Getting Started
 
-First, install the dependencies.
+First, install the dependencies and set up the playground.
 
 ```sh
-ni
+vp install && vp run setup:dev
 ```
 
-Then, run the following command to start the development server for the online book.
+Then, you can start the development server.
 
 ```sh
-nr book:dev
+vp run dev
 ```
+
+### Available Scripts
+
+| Script             | Description                                        |
+| ------------------ | -------------------------------------------------- |
+| **Book**           |                                                    |
+| `dev`              | Start online book dev server                       |
+| `build`            | Build online book                                  |
+| `preview`          | Preview built online book                          |
+| `lint:text`        | Lint book text                                     |
+| **Setup**          |                                                    |
+| `setup`            | Install dependencies and generate playground       |
+| `setup:dev`        | Generate playground files to examples/playground   |
+| `setup:vue`        | Set up Vue.js core comparison environment          |
+| `setup:book`       | Generate chibivue implementation for book readers  |
+| **Implementation** |                                                    |
+| `impl:dev`         | Start playground dev server                        |
+| `impl:dev:app`     | Start app example dev server                       |
+| `impl:dev:vapor`   | Start vapor mode example dev server                |
+| `impl:dev:vue`     | Start Vue.js core dev server for comparison        |
+| `impl:build`       | Build all packages                                 |
+| `impl:clean`       | Remove all dist folders                            |
+| `impl:check`       | Run all checks (lint, fmt, typecheck, build, test) |
+| **Quality**        |                                                    |
+| `check`            | Run Vite+ format, lint, and type checks            |
+| `check:types`      | Run type checking                                  |
+| `lint`             | Run linter                                         |
+| `lint:fix`         | Run linter with auto-fix                           |
+| `fmt`              | Format code                                        |
+| `fmt:check`        | Check code formatting                              |
+| `test`             | Run tests once                                     |
+| `test:watch`       | Run tests in watch mode                            |
+
+### Running book chapter implementations
 
 If you want to run the source code for each chapter, you can do so with the following command.
 
 ```sh
 cd book/impls/${section-name}/${chapter-name}
-nr dev
+vp run dev
 ```
+
+### Book Playground
+
+The project includes a WebContainer-based playground (`book/playground`) that allows readers to try each chapter's implementation directly in the browser.
+
+To start the playground:
+
+```sh
+vp run play           # Start the playground dev server
+```
+
+The playground supports:
+
+- Selecting different chapters to explore
+- Editing code with Monaco editor
+- Running the development server in the browser
+- Persisting edits to localStorage
+- Resetting files to their original state
+
+If you modify chapter implementations in `book/impls/`, run `vp run play:generate` to update the playground data.
 
 #### Creating a branch (start making changes)
 
@@ -125,6 +176,6 @@ Basically, all PRs are managed by @ubugeeei, so please contact @ubugeeei for any
 
 This is a guide to the changes you make. Here are a few points to keep in mind.
 
-- When making changes to the online book, please make sure that the content is consistent in both the Japanese and English versions.
+- When making changes to the online book, please make sure that the content is consistent across all language versions (English, Japanese, Simplified Chinese, Traditional Chinese).
 - When making changes to the source code of each chapter, please appropriately incorporate those changes into the source code of subsequent chapters.
 - When including images, figures, or text from other sources, please make sure to provide proper attribution.

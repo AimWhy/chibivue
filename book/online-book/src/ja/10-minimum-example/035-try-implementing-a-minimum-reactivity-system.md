@@ -13,14 +13,22 @@
 また，もう一つ大きな改善として，[feat(reactivity): more efficient reactivity system](https://github.com/vuejs/core/pull/5912) がありますが，こちらも別のチャプターで解説します．
 :::
 
-改めて目的を明確にしておくと，今回の目的は「ステートが変更された時に `updateComponent` を実行したい」です．  
+改めて目的を明確にしておくと，今回の目的は「ステートが変更された時に `updateComponent` を実行したい」です．
 Proxy を用いた実装の流れについて説明してみます．
 
 まず，Vue.js のリアクティビティシステムには `target`, `Proxy`, `ReactiveEffect`, `Dep`, `track`, `trigger`, `targetMap`, `activeEffect` (現在は `activeSub`) というものが登場します．
 
-まず，targetMap の構造についてです．  
-targetMap はある target の key と dep のマッピングです．  
-target というのはリアクティブにしたいオブジェクト，dep というのは実行したい作用(関数)だと思ってもらえれば大丈夫です．  
+<KawaikoNote variant="warning" title="登場人物が多い！">
+
+いきなりたくさんの用語が出てきましたが，焦らないでください！\
+一つずつ役割を見ていけば，パズルのピースがはまるように理解できます．\
+まずは「全体像をぼんやり掴む」ことを目指しましょう．
+
+</KawaikoNote>
+
+まず，targetMap の構造についてです．
+targetMap はある target の key と dep のマッピングです．
+target というのはリアクティブにしたいオブジェクト，dep というのは実行したい作用(関数)だと思ってもらえれば大丈夫です．
 コードで表すとこういう感じになります．
 
 ```ts
@@ -64,9 +72,9 @@ export default defineComponent({
 ```
 
 このチャプターではまだ watch は実装していないのですが，イメージのために書いてあります．\
-このコンポーネントでは最終的にかのような targetMap が形成されます．
+このコンポーネントでは最終的にこのような targetMap が形成されます．
 
-![target_map](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/target_map.drawio.png)
+![targetMap structure](/figures/10-minimum-example/reactivity/target-map-structure.svg)
 
 targetMap の key は「ある target」 です．この例では state1 と state2 がそれにあたります．\
 そして，これらの target が持つ key が targetMap の key になります．\
@@ -75,6 +83,15 @@ targetMap の key は「ある target」 です．この例では state1 と sta
 `() => h("p", {}, name: ${state1.name})` の部分で `state1->name->updateComponentFn` というマッピングが登録され，`watch(() => state2.count, onCountUpdated)` の部分で `state2->count->onCountUpdated` というマッピングが登録されるという感じです．
 
 基本的な構造はこれが担っていて，あとはこの TargetMap をどう作っていくか(どう登録していくか)と実際に作用を実行するにはどうするかということを考えます．
+
+<KawaikoNote variant="funny" title="シンプルに考えると">
+
+**targetMap** は「誰が誰に影響を与えるか」を記録するメモ帳です．\
+`state1.name` が変わったら → `updateComponent` を実行\
+`state2.count` が変わったら → `onCountUpdated` を実行\
+という関係を記録しています！
+
+</KawaikoNote>
 
 そこで登場する概念が `track` と `trigger` です．
 それぞれ名前の通り，`track` は `TargetMap` に登録する関数，`trigger` は `TargetMap` から作用を取り出して実行する関数です．
@@ -126,7 +143,15 @@ function reactive<T>(target: T) {
 }
 ```
 
-![reactive](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/reactive.drawio.png)
+![reactive track and trigger flow](/figures/10-minimum-example/reactivity/reactive-track-trigger.svg)
+
+<KawaikoNote variant="base" title="ここまでのポイント">
+
+- **track**: 値を「読んだとき」に呼ばれ，「この値が変わったら○○を実行してね」と登録
+- **trigger**: 値を「書き換えたとき」に呼ばれ，登録された処理を実行
+- **reactive**: この仕組みを持った Proxy を作る関数
+
+</KawaikoNote>
 
 ここで，一つ足りない要素について気づくかもしれません．それは「track ではどの関数を登録するの?」という点です．
 答えを言ってしまうと，これが `activeEffect` という概念です．
@@ -221,19 +246,19 @@ function render() {
 }
 ```
 
-実際にこの関数が走った時，`state.count` の `getter` 関数が実行され，`track` が実行されるようになっています．  
+実際にこの関数が走った時，`state.count` の `getter` 関数が実行され，`track` が実行されるようになっています．
 この状況下で，effect を実行してみます．
 
 ```ts
 effect.run()
 ```
 
-そうすると，まず `activeEffect` に `updateComponent` (を持った ReactiveEffect) が設定されます．  
-この状態で `track` が走るので，`targetMap` に `state.count` と `updateComponent` (を持った ReactiveEffect) のマップが登録されます．  
+そうすると，まず `activeEffect` に `updateComponent` (を持った ReactiveEffect) が設定されます．
+この状態で `track` が走るので，`targetMap` に `state.count` と `updateComponent` (を持った ReactiveEffect) のマップが登録されます．
 これがリアクティブの形成です．
 
-ここで，increment が実行された時のことを考えてみましょう．  
-increment では `state.count` を書き換えているので `setter` が実行され，`trigger` が実行されます．  
+ここで，increment が実行された時のことを考えてみましょう．
+increment では `state.count` を書き換えているので `setter` が実行され，`trigger` が実行されます．
 `trigger` は `state` と `count` を元に `targetMap` から `effect`(今回の例だと updateComponent)をみつけ，実行します．
 これで画面の更新が行われるようになりました!
 
@@ -241,12 +266,12 @@ increment では `state.count` を書き換えているので `setter` が実行
 
 ちょっとややこしいので図でまとめます．
 
-![reactivity_create](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/reactivity_create.drawio.png)
+![Reactivity setup flow during mount](/figures/10-minimum-example/reactivity/reactivity-setup-flow.svg)
 
 ## これらを踏まえて実装しよう
 
-一番難しいところは上記までの理解なので，理解ができればあとはソースコードを書くだけです．  
-とは言っても，実際のところどうなってるのかよく分からず上記だけでは理解ができない方もいるでしょう．  
+一番難しいところは上記までの理解なので，理解ができればあとはソースコードを書くだけです．
+とは言っても，実際のところどうなってるのかよく分からず上記だけでは理解ができない方もいるでしょう．
 そんな方も一旦ここで実装してみましょう．それから実際のコードを読みながら先ほどのセクションを見返してもらえたらと思います!
 
 まずは必要なファイルを作ります．`packages/reactivity`に作っていきます．
@@ -338,8 +363,8 @@ export function trigger(target: object, key?: unknown) {
 
 track と trigger の中身についてこれまで解説していないのですが，単純に targetMap に登録をしたり取り出して実行したりしているだけなので頑張って読んでみてください．
 
-続いて baseHandler.ts です．ここには reactive proxy のハンドラを定義します．  
-まあ，reactive に直接実装してもいいのですが，本家がこうなっているので真似してみました．  
+続いて baseHandler.ts です．ここには reactive proxy のハンドラを定義します．
+まあ，reactive に直接実装してもいいのですが，本家がこうなっているので真似してみました．
 実際には readonly や shallow などさまざまなプロキシが存在するのでそれらのハンドラをここに実装するイメージです．(今回はやりませんが)
 
 ```ts
@@ -374,9 +399,9 @@ const hasChanged = (value: any, oldValue: any): boolean =>
   !Object.is(value, oldValue)
 ```
 
-ここで，Reflect というものが登場していますが，Proxy と似た雰囲気のものなんですが，Proxy があるオブジェクトに対する設定を書き込む処理だったのに対し，Reflect はあるオブジェクトに対する処理を行うものです．  
-Proxy も Reflect も JS エンジン内のオブジェクトにまつわる処理の API で，普通にオブジェクトを使うのと比べてメタなプログラミングを行うことができます．  
-そのオブジェクトを変化させる関数を実行したり，読み取る関数を実行したり，key が存在するのかをチェックしたりさまざまなメタ操作ができます．  
+ここで，Reflect というものが登場していますが，Proxy と似た雰囲気のものなんですが，Proxy があるオブジェクトに対する設定を書き込む処理だったのに対し，Reflect はあるオブジェクトに対する処理を行うものです．
+Proxy も Reflect も JS エンジン内のオブジェクトにまつわる処理の API で，普通にオブジェクトを使うのと比べてメタなプログラミングを行うことができます．
+そのオブジェクトを変化させる関数を実行したり，読み取る関数を実行したり，key が存在するのかをチェックしたりさまざまなメタ操作ができます．
 とりあえず，Proxy = オブジェクトを作る段階でのメタ設定， Reflect = 既に存在しているオブジェクトに対するメタ操作くらいの理解があれば OK です．
 
 続いて reactive.ts です．
@@ -390,7 +415,7 @@ export function reactive<T extends object>(target: T): T {
 }
 ```
 
-これで reactive 部分の実装は終わりなので，mount する際に実際にこれらを使ってみましょう．  
+これで reactive 部分の実装は終わりなので，mount する際に実際にこれらを使ってみましょう．
 `~/packages/runtime-core/apiCreateApp.ts`です．
 
 ```ts
@@ -445,7 +470,7 @@ const app = createApp({
 app.mount('#app')
 ```
 
-![reactive_example_mistake](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/reactive_example_mistake.png)
+![Reactive example mistake in the browser](/figures/10-minimum-example/reactivity/reactive-example-mistake.png)
 
 あっ………
 
@@ -466,10 +491,18 @@ const render: RootRenderFunction = (vnode, container) => {
 
 さてこれでどうでしょう．
 
-![reactive_example](https://raw.githubusercontent.com/chibivue-land/chibivue/main/book/images/reactive_example.png)
+![Reactive example rendered in the browser](/figures/10-minimum-example/reactivity/reactive-example-result.png)
 
 今度は大丈夫そうです!
 
 これで reactive に画面を更新できるようになりました!!
+
+<KawaikoNote variant="surprise" title="おめでとう！">
+
+リアクティビティシステムの基本が完成しました！\
+Vue.js の「値を変えたら画面が更新される」魔法の正体，理解できましたか？\
+ここを乗り越えたあなたは，Vue.js の内部をかなり深く理解しています！
+
+</KawaikoNote>
 
 ここまでのソースコード: [GitHub](https://github.com/chibivue-land/chibivue/tree/main/book/impls/10_minimum_example/030_reactive_system)
